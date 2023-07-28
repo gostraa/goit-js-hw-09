@@ -2,6 +2,7 @@ import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+
 const btnStart = document.querySelector("[data-start]");
 const timerEl = document.querySelector(".timer")
 btnStart.disabled = true;
@@ -11,7 +12,7 @@ let timerDeadLine = null;
 Notify.init({
   width: '360px',
   position: 'center-top',
-  distance: '50px',
+  distance: '47px',
   opacity: 1,
   
 });
@@ -36,35 +37,28 @@ flatpickr("#datetime-picker", {
 btnStart.addEventListener("click", startCount);
 
 function startCount() {
-    timerId = setInterval(() => {
-       
-
-        const countedTime =  timerDeadLine - Date.now();
-        const timeRemaining = convertMs(countedTime);
-        console.log(timerDeadLine);
-
-        console.log( Date.now());
-        
-        if (countedTime <  1000) {
-            console.log(123);
-            clearInterval(timerId);
-        };
-
-        timerEl.querySelector("[data-days]").textContent =  formatTime(timeRemaining.days);
-        timerEl.querySelector("[data-hours]").textContent = formatTime(timeRemaining.hours);
-        timerEl.querySelector("[data-minutes]").textContent = formatTime(timeRemaining.minutes);
-        timerEl.querySelector("[data-seconds]").textContent = formatTime(timeRemaining.seconds);
-
-    
-    
-    }, 1000);
-
-
-
-    
-    
+  timerId = setInterval(() => {
+    const currentTime = Date.now();
+    const diff = timerDeadLine - currentTime;
+    if (diff <= 0) {
+      clearInterval(timerId);
+      return Notify.info("CONGRATULATIONS :)");
+    }
+    const timeRemaining = convertMs(diff);
+    timerEl.querySelector('[data-days]').textContent = formatTime(
+      timeRemaining.days
+    );
+    timerEl.querySelector('[data-hours]').textContent = formatTime(
+      timeRemaining.hours
+    );
+    timerEl.querySelector('[data-minutes]').textContent = formatTime(
+      timeRemaining.minutes
+    );
+    timerEl.querySelector('[data-seconds]').textContent = formatTime(
+      timeRemaining.seconds
+    );
+  }, 1000);
 }
-
 
 
 
